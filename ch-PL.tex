@@ -1,0 +1,68 @@
+\chapter{Programmazione lineare}
+
+Un problema è di programmazione lineare se:
+
+\begin{itemize}
+    \item le variabili hanno un dominio continuo,
+    \item i vincoli sono equazioni e disequazioni lineari delle variabili,
+    \item la funzione obbiettivo è una funzione lineare delle variabili.
+\end{itemize}
+
+\section{Forma generale}
+%Introdurre acronimo di PL
+Forma del problema di PL con una funzione obbiettivo e dei vincoli che possono essere disequazioni o equazioni. 
+
+\section{Forma alle disuguaglianze}
+Forma del problema dove non sono presenti vincoli in forma di equazioni e variabili libere. Inoltre il segno dei tutti i vincoli deve essere coerente e opposto a quello della funzione obbiettivo.
+
+%scrivere una formula per rappresentare forma disuguaglianze
+
+Questa forma offre un interpretazione geometrica del problema di PL. Un vincolo rappresenta un semipiano e la funzione obbiettivo corrisponde ad un fascio di iperpiani paralleli infine la direzione di ottimizzazione è definita da \textit{massimizza} o \textit{minimizza}.
+
+%aggiungere una nota a pie pagina con la spiegazione per cui l'intersezione tra vincoli è un poliedro.
+Quindi l'intersezione tra semispazi, sistema di vincoli, è un poliedro che può essere: 
+\begin{itemize}
+    \item limitato: almeno un vertice del poliedro corrisponde alla soluzione ottima,
+    \item illimitato: non esiste valore ottimo se illimitato nella direzione di ottimizzazione,
+    \item nullo: non ammette soluzioni.
+\end{itemize}
+
+\section{Forma standard}
+In questa forma la funzione obbiettivo è messa in forma di minimo e tutti vincoli devono essere di uguaglianza attraverso l'introduzione di variabili di \textit{slack} e \textit{surplus}.
+
+\begin{equation} \label{formaStandard}
+	z=\min \{c^Tx:Ax=b, x\geq0\}
+\end{equation}
+
+\subsection{Variabili di slack e surplus}
+Sono variabili non negative che vengono introdotte per trasformare i vincoli dalla forma di disequazione a quella di equazione.
+Per realizzare tale trasformazione devo:
+
+\begin{itemize}
+    \item Sommo variabili di \textit{slack} quando il segno del vincolo è $\leq$,
+    \item Sottraggo variabili di \textit{surplus} quando il segno del vincolo è di $\geq$.
+\end{itemize}
+
+\subsection{Soluzione di base}
+
+Dopo aver introdotto le variabili di slack e surplus il sistema dei vincoli è formato da $m$ equazioni lineari in $n+m$ variabili. 
+Il sistema per avere soluzione unica deve eliminare gli $n$ gradi di libertà in eccesso. Ogni variabile nulla nella forma standard corrisponde un vincolo attivo nella forma alle disuguaglianze.
+
+Una base è un sottoinsieme di $m$ variabili tra le $n+m$. La scelta di una base comporta in $A=[B|N]$. Quindi la scelta di una base si può scrivere in questo modo:
+%imparare a scrivere più formule nello stesso blocco equation, come se fossero dei passaggi
+\begin{equation}\label{sceltaBase}
+    \begin{array}{c}
+    Bx_b+Nx_n=b \\
+    B^{-1}Bx_b+B^{-1}Nx_n=B^{-1}b \\
+    x_b=B^{-1}b-B^{-1}Nx_n
+    \end{array}
+\end{equation}
+
+\section{Teorema fondamentale di PL}
+Dato un problema di PL in forma standard \ref{formaStandard}, $z=\{c^Tx:Ax=b, x\geq0\}$ con A di rango $m$:
+\begin{itemize}
+    \item se esiste una soluzione ammissibile allora esiste anche una soluzione ammissibile di base,
+    \item se esiste una soluzione ottima allora esiste anche una soluzione ottima di base.
+\end{itemize}
+Questo teorema permette di trasformare un problema nel continuo in uno nel discreto cercando soluzioni di base. 
+Il metodo risolutivo più diffuso è l'algoritmo del simplesso.
