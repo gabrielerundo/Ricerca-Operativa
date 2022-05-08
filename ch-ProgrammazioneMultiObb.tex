@@ -1,0 +1,55 @@
+\chapter{Programmazione multi obbiettivo}
+Estensione della programmazione lineare. Il problema di ottimizzazione per un problema a più obbiettivi è diviso in due parti:
+
+\begin{enumerate}
+	\item calcolo della regione Pareto-ottima,
+	\item scelta di una soluzione ottima tra quelle individuate nel passo precedente.
+\end{enumerate}
+
+In questo si considera solo la programmazione a due obbiettivi. Le soluzioni di un problema a più obbiettivi possono essere rappresentate nello spazio delle soluzioni $f_1(x) \times \dotsc f_k(x)$.
+
+\section{Dominanza}
+Dati $f_1(x), \dotsc, f_k(x)$ funzioni obbiettivo e due soluzioni ammissibili $x^{'}, x^{''}$, $x^{'}$ domina $x^{''}$ se e solo se:
+
+\begin{equation}\label{dominanza}
+	\begin{cases}
+		f_i(x^{'}) \leq f_i(x^{''}) \quad \forall i \in 1, \dotsc, k \\
+		\exists j \in 1, \dotsc, k : f_j(x^{'}) < f_j(x^{''})
+	\end{cases}
+\end{equation}
+
+Un interpretazione geometrica della dominanza in due dimensioni consiste nell'immaginare un rettangolo con un vertice nell'origne e l'altro nel punto $x^{''}$. Se il punto $x^{'}$ è all'interno del rettangolo allora la soluzione $x^{''}$ domina $x^{'}$.
+
+\section{Regione Pareto ottima}
+In programmazione a più obbiettivi il concetto di soluzione ottima è sostituito da quello di dominanza. L'insieme di tutte le soluzioni dominate definisce la regione Pareto ottima. Esistono due modalità per detrrminare la regione Pareto-ottima:
+
+\begin{itemize}
+	\item metodo dei pesi,
+	\item metodo dei vincoli.
+\end{itemize}
+
+\subsection{Metodo dei pesi}
+Questo metodo combina linearmente le funzioni obbiettivo in un unica attraverso dei coefficienti $\lambda$ tali che:
+
+\begin{equation*}
+	\lambda_i \geq 0 \quad \text{e} \quad \sum_k \lambda_k = 1
+\end{equation*}
+
+A questo punto si può calcolare regione Paretiana esegundo l'analisi parametrica su $\lambda$. 
+
+\subsection{Metodo dei vincoli}
+Invece il metodo dei vincoli ottimizza una sola funzione obbiettivo trasformando le altre in vincoli con un termine noto parametrico $\beta$. Per trovare la regione di Pareto devo eseguire l'analisi parametrica su $\beta$.
+
+\paragraph{Regione paretiana discreta}
+Il metodo dei pesi in generale non garantisce di trovare tutte le soluzioni paretiane, quindi per effettuare l'analisi della regione di Pareto si utilizza il metodo dei vincoli.
+
+\section{Scelta soluzione ottima}
+La seconda fase è supportata da metodi quantitativi, ovvero richiede una scelta che però non è demandabile ad un algoritmo.
+Esistono diversi metodi per questo scopo:
+
+\begin{itemize}
+	\item metodo delle curve di indifferenza,
+	\item criterio di massima curvatura,
+	\item criterio del punto utopia,
+	\item criterio degli standard.
+\end{itemize}
