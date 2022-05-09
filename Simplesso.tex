@@ -1,0 +1,209 @@
+\section{Algoritmo del simplesso}
+Partendo da una soluzione ammissibile l'algoritmo del simplesso, con le sue iterazioni, mantiene l'ammissibilità e cerca l'ottimalità.
+
+\subsection{Forma canonica}
+Partendo dalla forma stamdard, questa forma corrisponde alla scelta di una base di solito si sceglie la base canonica $I$.
+Estraendo la base $B$ da $A$ secondo formula (\ref{sceltaBase}) e poiché $B$ è invertibile, posso ricavare $x_b$:
+
+\begin{equation}\label{xB}
+x_b=B^{-1}b-(B^{-1}N)x_n
+\end{equation}
+
+Sostituendo $x_b$ nella funzione obbiettivo permette di ottenere:
+
+\begin{equation}\label{formaCanonicaEstesa}
+    \begin{array}{c}
+	\min z=c_b^TB^{-1}b+(c_n^T-c_b^TB^{-1}N)x_n \\
+	x_b+(B^{-1}N)x_n=B^{-1}b \\
+	x_b,x_n\geq0
+    \end{array}
+\end{equation}
+
+È possibile riscrivere il problema in forma più compatta nel seguente modo:
+
+\begin{equation}\label{formaCanonicaCompatta}
+    \begin{array}{c}
+		\min z=z_b+\bar{c}_n^Tx_n \\
+		\text{subject to } x_b+(B^{-1}N)x_n=B^{-1}b \\
+		x_b,x_n\geq0
+    \end{array}
+\end{equation}
+
+\subsubsection{Forma canonica debole}
+\begin{itemize}
+	\item le variabili in base non sono presenti nella funzione obbiettivo,
+	\item I coefficienti delle variabili in base formano una matrice identità $I\in M(m,m)$.
+\end{itemize}
+
+Se queste condizioni sono verificate allora il problema è in forma canonica debole, ovvero una soluzione inamissibile.
+
+Secondo l'interpretazione geometrica una forma non ammissibile è un intersezione dei vincoli fuori dal poliedro.
+
+%Introdurre una figura per rappresentare una soluzione inammsissibile.
+
+\subsubsection{Forma canonica forte}
+Se oltre alle precedenti condizioni vale anche la seguente:
+\begin{itemize}
+	\item i termini noti dei coeficienti dei vincoli sono non negativi, ovvero $\bar{b}\geq\bar{0}$.
+\end{itemize}
+
+Allora il problema di PL è in forma canonica forte che corrisponde ad una soluzione ammissibile del problema. Secondo l'iterpretazione geometrica questa corrisponde ad un vertice del poliedro.
+
+%pacchetto tick per disegnare su latex
+
+\subsection{Il tableau}
+Il tableau è una modalità di rappresentazione del problema di PL e la struttura dati su cui opera l'algoritmo.
+
+\begin{equation}\label{tableau}
+	\begin{array}{c|cc}
+		-z_b&\bar{c}_N^T&0\\
+		\hline
+		\bar{b}&\bar{N}&I	 
+	\end{array}
+\end{equation}
+
+Il significato dei valori:
+\begin{itemize}
+	\item $-z_b$ : valore della funzione obbiettivo cambiato di segno,
+	\item $\bar{c}_N^T$ : vettore dei coefficienti  di costo ridotto,
+	\item $\bar{b}$ : vettore dei termini noti dei vincoli.
+\end {itemize}
+
+%Traduzione da tableau a sistema di equazioni
+
+\paragraph{Test ottimalità}
+Osservando i coefficienti di costo ridotto $\bar{c}_N$ è possibile capire se un problema è ottimo, poiché rappresentano di quanto la funzione obbiettivo aumenterebbe se la variabile fuori base ad esso associata entrasse in base.
+
+Quando $\bar{c}_N>0$ e il problema è ammissibile allora la soluzione è ottima.
+
+\paragraph{Test di illimitatezza}
+Osservando i valori di una colonna candidata per eseguire un passo di pivot. Se tutti i suoi temrini sono negativi, ovvero $a_{i^*j} < 0$, allora il problema associato è illimitato.
+
+\subsection{Pseudocodice dell'algoritmo}
+L'algoritmo è diviso in due fasi:
+\begin{enumerate}
+ 	\item ricerca dell'ammissibilità, analizzando i coefficienti $\bar{c}_N$, 
+	\item ricerca dell'ottimalità, analizzando il vettore dei termini noti $\bar{b}$.
+\end{enumerate}
+	
+Ogni iterazione dell'algoritmo corrisponde ad un passo detto \textit{pivot}.
+
+\subsection{Pivot}
+Il passo di pivot corrisponde ad un cambio di base, ovvero una variabile in base esce ed una fuori entra.\footnote{In particolare entra in base la variabile il cui indice corrisponde alla colonna del pivot ed esce quella corrispondente alla riga del pivot.} 
+
+Secondo l'interpretazione geometrica il passo di pivot corrisponde al passaggio di un vertice ad un'altro del poligono.
+
+Il passo di pivot consiste nell'esecuzione di queste operazioni:
+\begin{enumerate}
+	\item scelgo un elemento positivo $a_{r,c}$ su una colonna con coefficiente di costo ridotto negativo, 
+	\item divido la riga $r$ per il pivot, 
+	\item sottraggo ad ogni riga $i\neq r$ la riga $r$ per $a_{i,c}$.
+\end{enumerate}
+
+Devo introdurre delle regole sulla scelta delle righe e delle colonne per applicare il passo di pivot sull'elemento \textit{corretto} così da mantenere l'ammissibilità e cercare l'ottimalità.
+
+\subsubsection{Regola di scelta della colonna}
+Per garantire che l'algoritmo sia privo di cicli infinti e ricerchi l'ottimalità devo scegliere la colonna con costo ridotto negativo. 
+Nel caso in cui le colonne possibili siano più di una devo scegliere una tra queste opzioni:
+\begin{itemize}
+	\item scelgo la colonna con il costo ridotto negativo minore,
+	\item ordino le colonne e prendo la prima colonna negativa,
+	\item scelgo la colonna con il maggiore miglioramento della funzione obbiettivo,
+	\item scelgo una colonna negativa a caso. 
+	%$|\frac{a_{i,0} \cdot a_{0,j}}{a_{i,j}}|$  
+\end{itemize}
+
+\subsection{Regola di scelta della riga}
+Per garantire invece che l'algoritmo continui a considerare una soluzione ammissibile della soluzione devo scegliere sulla colonna del pivot un elemento su una riga che:
+\begin{itemize}
+	\item valore positivo,
+	\item minimo rapporto tra termine noto $b_i$ e candidato pivot $a_{ij}$.
+\end{itemize}
+
+Il significato geometrico di tale scelta corrisponde a muoversi, all'interno del poliedro, fino ad un'altra soluzione di base.
+
+\subsection{Inizializzazione}
+
+In alcuni casi è possibile che la base di partenza sia non ammissibile, e per applicare l'algoritmo del simplesso devo partire da una base ammisibile. 
+
+Ci sono tre metodi per passare da una base non ammisibile ad una ammissibile:
+
+\begin{enumerate}
+	\item metodo delle variabili artificali,
+	\item metodo big M,
+	\item metodo Balinski-Gomori.
+\end{enumerate}
+
+\subsubsection{Metodo delle variabili artificiali}
+Dato un modello di PL in forma standard \ref{formaStandard} si introduce una variabile artificiale $u_i\geq0$ con coefficiente $1$ per ogni vincolo definendo così un problema artificiale:
+
+%introdurre formula del problema artificiale
+\begin{equation} \label{problemaArtificiale}
+z^{a} = \min \{ e^{T}u : Ax+Iu=\bar{b} \}
+\end{equation}
+
+Questo problema artificale non soddisfa le condizioni di ammisibilità. Devo scrivere le $u_i$ come combinazione lineare delle $a_{ij}$ affinché non compaiano nella funzione obbiettivo.
+
+Se il valore all'ottimo del problema artificiale è nullo, $z^a=0$, allora questa soluzione del problema ausiliario corrisponde ad una soluzione ammissibile nel problema originale, altrimenti il problema orifinario è inamissibile.
+%per quale ragione? 
+
+Utilizzando questo approccio il tableau diventa più complesso, tuttavia è possibile semplificare il problema artificiale introducendo variabili artificali sono su alcuni vincoli.
+
+\begin{itemize}
+	\item Per i vincoli a cui è associata una variabile di slack non è necessario associare una variabile artificale, %perché?
+	\item mentre per quelli a cui è associata una varibile di surplus ad ogni vincolo. %Questa parte non è molto chiara
+\end{itemize}
+
+\subsubsection{Metodo big M}
+Invece di elimanre le variabili $x$ dal problema artificiale le penalizzo utilizzando coefficienti $M$ molto grandi.
+Si risolve quindi un problema dove:
+
+\begin{equation} \label{MetodoBigM}
+\min z = \{ c^{T}x+w^{T}u=b , x,u \in \Re^{n}_+ \} \text{	dove } w^{T} = [M, \dotsc, M] 
+\end{equation}
+
+Utilizzando questo approccio un problema associato è la scelta di $M$.
+
+\subsubsection{Metodo Balinski Gomory}
+Questo approccio mantiene sempre le stesse dimensioni del tableu originale, accettando di lavorare su una forma canonica debole eseguendo passi di pivot sui vincoli violati, ovvero quelli con $b_i < 0$.
+
+Il procedimento funziona in questo modo:
+\begin{itemize}
+	\item considero un vincolo violato,
+	\item lo considero come obbiettivo e cerco di ottimizzarlo, sostitendolo con la funzione obbiettivo senza però selezionando gli elementi della riga come pivot,
+	\item effettuo passi di pivot sul problema ausiliario.
+\end{itemize}
+
+Posso verificarsi diverse situazioni sul problema asiliario:
+
+\begin{itemize}
+	\item il problema ausiliario è inamissibile. 
+	\item il problema ausiliario è illimiato.
+	\item il problema ausiliario è limitato.
+\end{itemize}
+
+\paragraph{Esempio di applicazione del metodo}
+\[  
+	\begin{array}{r|rrrrr}
+		 0 &  0 & -1 & 0 & 0 & 0 \\
+		\hline
+		-2 &  1 & -2 & 1 & 0 & 0 \\
+		-4 & -2 &  1 & 0 & 1 & 0 \\
+		 4 &  1 &  1 & 0 & 0 & 1 
+	\end{array}
+\]
+
+Questo tableau rappresenta un problema inammsibile, applico il metodo di Balinsk-Gomory e scelgo come obbiettivo un vincolo violato su cui effettuare il passo di pivot.
+
+\[  
+	\begin{array}{r|rrrrr}
+		-4 & -2 &  1 & 0 & 1 & 0 \\
+		\hline
+		-2 &  1 & -2 & 1 & 0 & 0 \\
+		 4 &  1 &  1 & 0 & 0 & 1 \\
+		\hline
+		 0 &  0 & -1 & 0 & 0 & 0 \\
+	\end{array}
+\]
+
+A questo punto ottengo un problema ausiliario su eseguo diversi passi di pivot. 
