@@ -10,17 +10,31 @@ Un problema è di programmazione lineare se:
 
 \section{Forma generale}
 %Introdurre acronimo di PL
-Forma del problema di PL con una funzione obbiettivo e dei vincoli che possono essere disequazioni o equazioni. 
+Forma del problema di PL con una funzione obbiettivo lineare rispetto alle variabili, vincoli in forma di equazioni o disequazioni e delle variabili libere. 
 
 \section{Forma alle disuguaglianze}
-Forma del problema dove non sono presenti vincoli in forma di equazioni e variabili libere. Inoltre il segno dei tutti i vincoli deve essere coerente e opposto a quello della funzione obbiettivo.
+Rappresentazione del problema di PL dove non sono presenti vincoli in forma di equazioni, variabili libere e tutti i vincoli sono di verso opposto a quello della funzione obbiettivo.
+Per ottenere tale forma è necessario:
+\begin{itemize}
+	\item eliminare i vincoli di uguaglianza attraverso sotituzioni,
+	\item eliminare variabili libere attraverso sottrazione tra variabili non negative.
+\end{itemize}
 
 %scrivere una formula per rappresentare forma disuguaglianze
+\begin{equation} \label{esFormaDis}
+	\begin{split}
+		\text{max } w& = +x_3 +3x_4 -3x_5\\
+		\text{s.t. } & \quad -3x_3 +2x_4 -2x_5 \le 9 \\
+		& \quad  -4x_3 -3x_4 +3x_5 \le 8\\
+		& \quad x_3, x_4, x_5 \ge 0
+	\end{split}
+\end{equation}
 
-Questa forma offre un interpretazione geometrica del problema di PL. Un vincolo rappresenta un semipiano e la funzione obbiettivo corrisponde ad un fascio di iperpiani paralleli infine la direzione di ottimizzazione è definita da \textit{massimizza} o \textit{minimizza}.
+Questa forma offre un interpretazione geometrica del problema di PL.
+Un vincolo rappresenta un semipiano convesso, la funzione obbiettivo corrisponde ad un fascio di iperpiani paralleli infine la direzione di ottimizzazione è definita da quale tipo di ottimizzazione è richiesta \textit{massimizza} o \textit{minimizza}.
 
 %aggiungere una nota a pie pagina con la spiegazione per cui l'intersezione tra vincoli è un poliedro.
-Quindi l'intersezione tra semispazi, sistema di vincoli, è un poliedro che può essere: 
+Il sistema di vincoli corrisponde ad un intersezione tra semispazi convessi. L'intersezione tra semispazi è un poliedro che può essere: 
 \begin{itemize}
     \item limitato: almeno un vertice del poliedro corrisponde alla soluzione ottima,
     \item illimitato: non esiste valore ottimo se illimitato nella direzione di ottimizzazione,
@@ -28,7 +42,7 @@ Quindi l'intersezione tra semispazi, sistema di vincoli, è un poliedro che può
 \end{itemize}
 
 \section{Forma standard}
-In questa forma la funzione obbiettivo è messa in forma di minimo e tutti vincoli devono essere di uguaglianza attraverso l'introduzione di variabili di \textit{slack} e \textit{surplus}.
+In questa forma la funzione obbiettivo è messa in forma di minimo e tutti vincoli devono essere di uguaglianza, attraverso l'introduzione di variabili di \textit{slack} e \textit{surplus}.
 
 \begin{equation} \label{formaStandard}
 	z=\min \{c^Tx:Ax=b, x\geq0\}
